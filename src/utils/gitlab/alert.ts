@@ -16,11 +16,10 @@ export default async function alert(finalReport: FinalReport) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+                content: `🐝 <@&${CRITICAL_ROLE}>`,
                 embeds: [
                     {
-                        title: finalReport.highestSeverity === 'critical'
-                            ? `🐝 <@&${CRITICAL_ROLE}>${finalReport.title.slice(2)}`
-                            : finalReport.title,
+                        title: finalReport.title,
                         description: finalReport.description,
                         color: finalReport.highestSeverity === 'critical' ? 0xff0000 : 0xfd8738,
                         timestamp: new Date().toISOString()

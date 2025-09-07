@@ -56,7 +56,7 @@ export default async function checkGitlab() {
             const criticalText = `\nCritical: ${criticalCount}`
             const highText = highCount > 0 ? `, High: ${highCount}` : ''
             const mediumText = mediumCount > 0 ? `, Medium: ${mediumCount}` : ''
-            const repositoryText = `. Critical vulnerabilities should be patched immediately.`
+            const repositoryText = `. Critical vulnerabilities should be patched immediately.\n`
             finalReport.description += repositoryName + criticalText + highText + mediumText + repositoryText
             notified.critical.push({
                 name: repository.name,
@@ -77,7 +77,7 @@ export default async function checkGitlab() {
             const repositoryName = `**${repository.name}**`
             const highText = `\nHigh: ${highCount}`
             const mediumText = mediumCount > 0 ? `, Medium: ${mediumCount}` : ''
-            const repositoryText = `. High vulnerabilities should be prioritized.`
+            const repositoryText = `. High vulnerabilities should be prioritized.\n`
             finalReport.description += repositoryName + highText + mediumText + repositoryText
             notified.high.push({
                 name: repository.name,
@@ -92,7 +92,7 @@ export default async function checkGitlab() {
             const mediumCount = repository.details.moderate
             const repositoryName = `**${repository.name}**`
             const mediumText = `\nMedium: ${mediumCount}`
-            const repositoryText = `. Medium vulnerabilities should be patched when possible.`
+            const repositoryText = `. Medium vulnerabilities should be patched when possible.\n`
             finalReport.description += repositoryName + mediumText + repositoryText
             notified.medium.push({
                 name: repository.name,
