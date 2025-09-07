@@ -33,6 +33,7 @@ export default async function getNpmProjects() {
                 })
             }
         }
+
         page++
     }
 

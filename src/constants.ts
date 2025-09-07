@@ -7,7 +7,7 @@ const requiredEnvironmentVariables = [
     'GITLAB_TOKEN',
     'WEBHOOK_URL',
     'HEARTBEAT_URL',
-    'CRITICAL_ROLE'
+    'CRITICAL_ROLE',
 ]
 
 const missingVariables = requiredEnvironmentVariables.filter(
@@ -27,11 +27,17 @@ const env = Object.fromEntries(
     requiredEnvironmentVariables.map((key) => [key, process.env[key]])
 )
 
-export const notified = {
+export const notifiedVulnerabilities = {
     critical: [],
     high: [],
     medium: []
-} as Notified
+} as NotifiedVulnerabilities
+
+export const notifiedSecrets = {
+    hasExpired: [],
+    expiresNextWeek: [],
+    expiresNextMonth: [],
+} as NotifiedSecrets
 
 const config = {
     ONEPASSWORD_TOKEN: env.ONEPASSWORD_TOKEN,

@@ -1,10 +1,8 @@
-import { notified } from "@constants"
-import checkGitlab from "@utils/checkGitlab"
-import checkOnePassword from "@utils/checkOnePassword"
 import heartbeat from "@utils/heartbeat"
+import { fork } from "child_process"
+import path from "path"
+import { notifiedVulnerabilities, notifiedSecrets } from "@constants"
 import { schedule } from "node-cron"
-
-const oneDay = 24 * 60 * 60 * 1000
 
 async function scout() {
     setInterval(async () => {
@@ -16,37 +14,33 @@ async function scout() {
     }, 60 * 1000)
 
     schedule('*/15 * * * *', async() => {
-        const startTimeRaw = new Date()
-        const startTime = startTimeRaw.toLocaleString('nb-NO', {
-            timeZone: 'Europe/Oslo',
+        const workerPath = path.join(__dirname, "utils/scout.js")
+        const child = fork(workerPath)
+        child.send({
+            type: "init",
+            notifiedVulnerabilities,
+            notifiedSecrets
         })
 
-        console.log(`🐝 Started scouting at ${startTime}...`)
+        child.on("message", (msg: any) => {
+            if (msg.type === "updateAllVulnerabilities") {
+                Object.assign(notifiedVulnerabilities, msg.data)
+                console.log("🐝 Updated notified vulnerabilities:", Object.values(notifiedVulnerabilities).map(arr => arr.length))
+            }
 
-        await checkOnePassword()
-        await checkGitlab()
-
-        const stoppedTimeRaw = new Date()
-        const stoppedTime = stoppedTimeRaw.toLocaleString('nb-NO', {
-            timeZone: 'Europe/Oslo',
+            if (msg.type === "updateAllSecrets") {
+                Object.assign(notifiedSecrets, msg.data)
+                console.log("🐝 Updated notified secrets:", Object.values(notifiedSecrets).map(arr => arr.length))
+            }
         })
 
-        const now = Date.now()
-
-        notified.critical = notified.critical.filter(notification => {
-            return (now - new Date(notification.time).getTime()) < oneDay
+        child.on("exit", code => {
+            console.log(`🐝 Scout exited with code ${code}`)
         })
 
-        notified.high = notified.high.filter(notification => {
-            return (now - new Date(notification.time).getTime()) < oneDay
+        child.on("error", err => {
+            console.error("🐝 Scout process error:", err)
         })
-
-        notified.medium = notified.medium.filter(notification => {
-            return (now - new Date(notification.time).getTime()) < oneDay
-        })
-
-        const duration = (stoppedTimeRaw.getTime() - startTimeRaw.getTime()) / 1000
-        console.log(`🐝 Stopped scouting at ${stoppedTime} (${duration}s)...`)
     })
 }
 

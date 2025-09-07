@@ -2,26 +2,20 @@ import config from "@constants"
 
 const CRITICAL_ROLE = config.CRITICAL_ROLE
 
-type FinalReport = {
-    title: string
-    description: string
-    highestSeverity: Severity
-}
-
-export default async function alert(finalReport: FinalReport) {
+export default async function alertExpired(ping: boolean, red: boolean, finalReport: string) {
     try {
         let data: { content?: string; embeds: any[] } = {
             embeds: [
                 {
-                    title: finalReport.title,
-                    description: finalReport.description,
-                    color: finalReport.highestSeverity === 'critical' ? 0x800080 : 0xff0000,
+                    title: '🐝 Secret Report 🐝',
+                    description: finalReport,
+                    color: ping || red ? 0xff0000 : 0xfd8738,
                     timestamp: new Date().toISOString()
                 }
             ]
         }
 
-        if (finalReport.highestSeverity === 'critical') {
+        if (ping) {
             data.content = `🐝 <@&${CRITICAL_ROLE}> 🐝`
         }
 

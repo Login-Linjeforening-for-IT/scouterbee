@@ -13,7 +13,12 @@ export default async function heartbeat() {
             throw new Error(await response.text())
         }
 
+        const now = new Date().toLocaleString('nb-NO', {
+            timeZone: 'Europe/Oslo',
+        })
+
         const data = await response.json()
+        console.log(`🐝 Heartbeat ${now}`, data)
         return data
     } catch (error) {
         console.log(error)
