@@ -32,8 +32,7 @@ export default async function alert(finalReport: FinalReport) {
             throw new Error(await response.text())
         }
 
-        const data = await response.json()
-        return data
+        return response.status
     } catch (error) {
         console.log(error)
     }
