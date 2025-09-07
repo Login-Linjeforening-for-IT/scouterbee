@@ -7,7 +7,11 @@ import { schedule } from "node-cron"
 const oneDay = 24 * 60 * 60 * 1000
 
 async function scout() {
-    // schedule('*/5 * * * *', async() => {
+    schedule('* * * * *', async() => {
+        await heartbeat()
+    })
+
+    schedule('*/5 * * * *', async() => {
         const startTimeRaw = new Date()
         const startTime = startTimeRaw.toLocaleString('nb-NO', {
             timeZone: 'Europe/Oslo',
@@ -37,11 +41,9 @@ async function scout() {
             return (now - new Date(notification.time).getTime()) < oneDay
         })
 
-        await heartbeat()
-
         const duration = (stoppedTimeRaw.getTime() - startTimeRaw.getTime()) / 1000
         console.log(`🐝 Stopped scouting at ${stoppedTime} (${duration}s)...`)
-    // })
+    })
 }
 
 scout()
