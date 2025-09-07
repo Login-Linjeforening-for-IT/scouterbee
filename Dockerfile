@@ -2,7 +2,7 @@
 FROM node:20-alpine
 
 # Installs required system dependencies
-RUN apk add --no-cache python3 make g++
+RUN apk add --no-cache python3 make g++ git
 
 # Sets the environment variable to point to Python
 ENV PYTHON python3
