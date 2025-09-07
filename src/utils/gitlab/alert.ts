@@ -16,7 +16,7 @@ export default async function alert(finalReport: FinalReport) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                content: `🐝 <@&${CRITICAL_ROLE}>`,
+                content: `🐝 <@&${CRITICAL_ROLE}> 🐝`,
                 embeds: [
                     {
                         title: finalReport.title,
