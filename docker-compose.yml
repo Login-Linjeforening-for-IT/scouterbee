@@ -1,0 +1,10 @@
+services:
+  scouterbee:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      GITLAB_TOKEN: ${GITLAB_TOKEN}
+      ONEPASSWORD_TOKEN: ${ONEPASSWORD_TOKEN}
+      WEBHOOK_URL: ${WEBHOOK_URL}
+      HEARTBEAT_URL: ${HEARTBEAT_URL}
