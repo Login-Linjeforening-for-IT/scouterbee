@@ -7,11 +7,15 @@ import { schedule } from "node-cron"
 const oneDay = 24 * 60 * 60 * 1000
 
 async function scout() {
-    schedule('* * * * *', async() => {
-        await heartbeat()
-    })
+    setInterval(async () => {
+        try {
+            await heartbeat()
+        } catch (err) {
+            console.error("Heartbeat failed:", err)
+        }
+    }, 60 * 1000)
 
-    schedule('*/5 * * * *', async() => {
+    schedule('*/15 * * * *', async() => {
         const startTimeRaw = new Date()
         const startTime = startTimeRaw.toLocaleString('nb-NO', {
             timeZone: 'Europe/Oslo',
