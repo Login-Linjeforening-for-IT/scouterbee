@@ -1,6 +1,6 @@
 import config from "@constants"
 
-const CRITICAL_ROLE = config.CRITICAL_ROLE
+const CRITICAL_ROLE_DEV = config.CRITICAL_ROLE_DEV
 
 type FinalReport = {
     title: string
@@ -22,7 +22,7 @@ export default async function alert(finalReport: FinalReport) {
         }
 
         if (finalReport.highestSeverity === 'critical') {
-            data.content = `🐝 <@&${CRITICAL_ROLE}> 🐝`
+            data.content = `🐝 <@&${CRITICAL_ROLE_DEV}> 🐝`
         }
 
         const response = await fetch(config.WEBHOOK_URL ?? '', {

@@ -1,6 +1,6 @@
 import config from "@constants"
 
-const CRITICAL_ROLE = config.CRITICAL_ROLE
+const CRITICAL_ROLE_INFRA = config.CRITICAL_ROLE_INFRA
 
 export default async function alertExpired(ping: boolean, red: boolean, finalReport: string) {
     try {
@@ -16,7 +16,7 @@ export default async function alertExpired(ping: boolean, red: boolean, finalRep
         }
 
         if (ping) {
-            data.content = `🐝 <@&${CRITICAL_ROLE}> 🐝`
+            data.content = `🐝 <@&${CRITICAL_ROLE_INFRA}> 🐝`
         }
 
         const response = await fetch(config.WEBHOOK_URL ?? '', {

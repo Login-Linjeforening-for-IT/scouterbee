@@ -7,7 +7,8 @@ const requiredEnvironmentVariables = [
     'GITLAB_TOKEN',
     'WEBHOOK_URL',
     'HEARTBEAT_URL',
-    'CRITICAL_ROLE',
+    'CRITICAL_ROLE_DEV',
+    'CRITICAL_ROLE_INFRA'
 ]
 
 const missingVariables = requiredEnvironmentVariables.filter(
@@ -46,7 +47,8 @@ const config = {
     WEBHOOK_URL: env.WEBHOOK_URL,
     TEKKOM_GROUP_ID: 5,
     HEARTBEAT_URL: env.HEARTBEAT_URL,
-    CRITICAL_ROLE: env.CRITICAL_ROLE
+    CRITICAL_ROLE_DEV: env.CRITICAL_ROLE_DEV,
+    CRITICAL_ROLE_INFRA: env.CRITICAL_ROLE_INFRA
 }
 
 export default config
