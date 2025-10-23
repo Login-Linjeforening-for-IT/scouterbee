@@ -1,4 +1,4 @@
-import config from "#constants"
+import config from '#constants'
 
 const TOKEN = config.GITLAB_TOKEN
 

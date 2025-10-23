@@ -1,4 +1,4 @@
-import prepareReport from "./prepareReport.ts"
+import prepareReport from './prepareReport.ts'
 
 const oneWeek = 7 * 24 * 60 * 60 * 1000
 const oneMonth = 30 * 24 * 60 * 60 * 1000
@@ -12,9 +12,9 @@ export default async function checkExpiration(notifiedSecrets: NotifiedSecrets, 
     } as NotifiedSecrets
 
     const ranges: [keyof ExpiresAlert, (diff: number) => boolean][] = [
-        ["hasExpired", (diff) => diff < 0],
-        ["expiresNextWeek", (diff) => diff >= 0 && diff <= oneWeek],
-        ["expiresNextMonth", (diff) => diff > oneWeek && diff <= oneMonth],
+        ['hasExpired', (diff) => diff < 0],
+        ['expiresNextWeek', (diff) => diff >= 0 && diff <= oneWeek],
+        ['expiresNextMonth', (diff) => diff > oneWeek && diff <= oneMonth],
     ]
 
     for (const token of tokensWithExpire) {
@@ -28,8 +28,8 @@ export default async function checkExpiration(notifiedSecrets: NotifiedSecrets, 
                         const newItem: Expires = {
                             vault: token.vault,
                             title: token.item,
-                            time: new Date(fieldDateTime).toLocaleString("nb-NO", {
-                                timeZone: "Europe/Oslo",
+                            time: new Date(fieldDateTime).toLocaleString('nb-NO', {
+                                timeZone: 'Europe/Oslo',
                             }),
                             seen: now,
                         }

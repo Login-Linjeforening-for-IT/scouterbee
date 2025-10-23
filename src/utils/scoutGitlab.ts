@@ -1,9 +1,9 @@
-import getNpmProjects from "./gitlab/getNpmProjects.ts"
-import alert from "./gitlab/alert.ts"
-import cloneAndScoutRepositories from "./gitlab/cloneAndScoutRepositories.ts"
+import getNpmProjects from './gitlab/getNpmProjects.ts'
+import alert from './gitlab/alert.ts'
+import cloneAndScoutRepositories from './gitlab/cloneAndScoutRepositories.ts'
 
 export default async function scoutGitlab(notifiedVulnerabilities: NotifiedVulnerabilities) {
-    console.log("🐝 Scouting Gitlab...")
+    console.log('🐝 Scouting Gitlab...')
     const repositories = await getNpmProjects()
     const vulnerabilities = await cloneAndScoutRepositories(repositories)
     const critical = []
@@ -40,7 +40,7 @@ export default async function scoutGitlab(notifiedVulnerabilities: NotifiedVulne
     }
 
     let finalReport = {
-        title: "🐝 Vulnerability Report 🐝",
+        title: '🐝 Vulnerability Report 🐝',
         description: '',
         highestSeverity: 'medium' as Severity
     }

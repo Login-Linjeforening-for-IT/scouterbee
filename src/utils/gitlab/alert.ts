@@ -1,4 +1,4 @@
-import config from "#constants"
+import config from '#constants'
 
 const CRITICAL_ROLE_DEV = config.CRITICAL_ROLE_DEV
 

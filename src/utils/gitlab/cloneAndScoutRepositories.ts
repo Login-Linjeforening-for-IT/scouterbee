@@ -27,7 +27,7 @@ export default async function cloneAndScoutRepositories(repositories: Repo[]) {
         if (!fs.existsSync(repositoryDirectory)) {
             try {
                 console.log(`\n🐝 Cloning ${repository.name} 🐝`)
-                execSync(`git clone --branch ${repository.defaultBranch} ${cloneUrl} "${repositoryDirectory}"`, { stdio: 'inherit' })
+                execSync(`git clone --branch ${repository.defaultBranch} ${cloneUrl} '${repositoryDirectory}'`, { stdio: 'inherit' })
             } catch (err) {
                 console.error(`Failed to clone ${repository.name}:`, err)
                 continue
@@ -53,7 +53,7 @@ export default async function cloneAndScoutRepositories(repositories: Repo[]) {
             for (const entry of entries) {
                 const fullPath = path.join(currentDir, entry.name)
                 if (entry.isDirectory()) {
-                    if (entry.name === "node_modules" || entry.name.startsWith(".")) {
+                    if (entry.name === 'node_modules' || entry.name.startsWith('.')) {
                         continue
                     }
 
