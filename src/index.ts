@@ -2,7 +2,7 @@ import heartbeat from "@utils/heartbeat"
 import { fork } from "child_process"
 import path from "path"
 import { notifiedVulnerabilities, notifiedSecrets } from "@constants"
-import { schedule } from "node-cron"
+import schedule from "node-schedule"
 
 async function scout() {
     setInterval(async () => {
@@ -13,7 +13,7 @@ async function scout() {
         }
     }, 60 * 1000)
 
-    schedule('*/15 * * * *', async() => {
+    schedule.scheduleJob('*/15 * * * *', async() => {
         const workerPath = path.join(__dirname, "utils/scout.js")
         const child = fork(workerPath)
         child.send({
