@@ -1,11 +1,10 @@
 {
   "name": "scouterbee",
   "version": "1.1.1",
-  "main": "index.js",
+  "main": "src/index.js",
+  "type": "module",
   "scripts": {
-    "build": "tsc && tsc-alias",
-    "dev": "tsx --watch src/index.ts",
-    "start": "node dist/index.js"
+    "start": "node src/index.ts"
   },
   "keywords": [],
   "author": "Login - Linjeforeningen for IT - TekKom",
@@ -19,8 +18,11 @@
   "devDependencies": {
     "@types/node": "^24.3.0",
     "@types/node-schedule": "^2.1.8",
-    "tsc-alias": "^1.8.16",
-    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.2"
+  },
+  "imports": {
+    "#utils/*": "./src/utils/*",
+    "#constants": "./src/constants.ts",
+    "#/*": "./src/*"
   }
 }

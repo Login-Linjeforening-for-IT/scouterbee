@@ -1,4 +1,4 @@
-import prepareReport from "./prepareReport"
+import prepareReport from "./prepareReport.ts"
 
 const oneWeek = 7 * 24 * 60 * 60 * 1000
 const oneMonth = 30 * 24 * 60 * 60 * 1000

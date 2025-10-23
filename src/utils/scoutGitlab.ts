@@ -1,6 +1,6 @@
-import getNpmProjects from "./gitlab/getNpmProjects"
-import alert from "./gitlab/alert"
-import cloneAndScoutRepositories from "./gitlab/cloneAndScoutRepositories"
+import getNpmProjects from "./gitlab/getNpmProjects.ts"
+import alert from "./gitlab/alert.ts"
+import cloneAndScoutRepositories from "./gitlab/cloneAndScoutRepositories.ts"
 
 export default async function scoutGitlab(notifiedVulnerabilities: NotifiedVulnerabilities) {
     console.log("🐝 Scouting Gitlab...")

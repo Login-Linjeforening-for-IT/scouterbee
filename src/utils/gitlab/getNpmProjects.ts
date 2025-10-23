@@ -1,5 +1,5 @@
-import config from "@constants"
-import hasPackageJsonAnywhere from "./hasPackageJSON"
+import config from "#constants"
+import hasPackageJsonAnywhere from "./hasPackageJSON.ts"
 
 const GITLAB_URL = config.GITLAB_URL
 const TOKEN = config.GITLAB_TOKEN

@@ -1,8 +1,12 @@
-import heartbeat from "@utils/heartbeat"
+import heartbeat from "#utils/heartbeat.ts"
 import { fork } from "child_process"
-import path from "path"
-import { notifiedVulnerabilities, notifiedSecrets } from "@constants"
+import { fileURLToPath } from "url"
+import { notifiedVulnerabilities, notifiedSecrets } from "#constants"
 import schedule from "node-schedule"
+import path from "path"
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename);
 
 async function scout() {
     setInterval(async () => {
@@ -14,8 +18,8 @@ async function scout() {
     }, 60 * 1000)
 
     schedule.scheduleJob('*/15 * * * *', async() => {
-        const workerPath = path.join(__dirname, "utils/scout.js")
-        const child = fork(workerPath)
+        const workerPath = path.join(__dirname, "utils/scout.ts")
+        let child = fork(workerPath)
         child.send({
             type: "init",
             notifiedVulnerabilities,
@@ -36,10 +40,18 @@ async function scout() {
 
         child.on("exit", code => {
             console.log(`🐝 Scout exited with code ${code}`)
+            child.removeAllListeners()
+            setImmediate(() => child.unref())
+            // @ts-ignore
+            child = null
         })
 
         child.on("error", err => {
             console.error("🐝 Scout process error:", err)
+            child.removeAllListeners()
+            setImmediate(() => child.unref())
+            // @ts-ignore
+            child = null
         })
     })
 }

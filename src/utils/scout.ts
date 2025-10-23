@@ -1,5 +1,5 @@
-import scoutGitlab from "./scoutGitlab"
-import scoutOnePassword from "./scoutOnePassword"
+import scoutGitlab from "./scoutGitlab.ts"
+import scoutOnePassword from "./scoutOnePassword.ts"
 
 let notifiedVulnerabilities: NotifiedVulnerabilities = {
     critical: [],

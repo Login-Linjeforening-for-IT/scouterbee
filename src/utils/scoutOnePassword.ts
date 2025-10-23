@@ -1,6 +1,6 @@
 import { exec } from "child_process"
-import checkExpiration from "./onePassword/checkExpiration"
-import alertExpired from "./onePassword/alertExpired"
+import checkExpiration from "./onePassword/checkExpiration.ts"
+import alertExpired from "./onePassword/alertExpired.ts"
 
 const ONEPASSWORD_TOKEN = process.env.ONEPASSWORD_TOKEN
 

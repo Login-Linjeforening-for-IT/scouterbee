@@ -1,5 +1,5 @@
 # Uses node 20 alpine image for apk package manager
-FROM node:20-alpine
+FROM node:alpine
 
 # Installs required system dependencies
 RUN apk add --no-cache python3 make g++ git curl unzip
@@ -39,9 +39,6 @@ RUN npm install
 
 # Copies contents
 COPY . .
-
-# Builds the repo
-RUN npm run build
 
 # Stars the application
 CMD npm start
