@@ -3,6 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    restart: always
     environment:
       GITLAB_TOKEN: ${GITLAB_TOKEN}
       ONEPASSWORD_TOKEN: ${ONEPASSWORD_TOKEN}
