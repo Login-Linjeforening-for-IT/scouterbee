@@ -9,3 +9,6 @@ services:
       ONEPASSWORD_TOKEN: ${ONEPASSWORD_TOKEN}
       WEBHOOK_URL: ${WEBHOOK_URL}
       HEARTBEAT_URL: ${HEARTBEAT_URL}
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
