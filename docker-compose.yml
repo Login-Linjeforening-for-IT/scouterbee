@@ -1,6 +1,7 @@
 services:
   scouterbee:
     container_name: scouterbee
+    image: scouterbee
     build:
       context: .
       dockerfile: Dockerfile
