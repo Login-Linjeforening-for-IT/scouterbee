@@ -1,13 +1,20 @@
 import { exec } from 'child_process'
 import checkExpiration from './onePassword/checkExpiration.ts'
 import alertExpired from './onePassword/alertExpired.ts'
+import { readFile, writeFile } from './file.ts'
+import config from '#constants'
 
 const ONEPASSWORD_TOKEN = process.env.ONEPASSWORD_TOKEN
 
-export default async function scoutOnePassword(notifiedSecrets: NotifiedSecrets) {
-    console.log('🐝 Scouting 1Password...')
+export default async function scoutOnePassword() {
+    const startTime = new Date().toLocaleString('nb-NO', {
+        timeZone: 'Europe/Oslo'
+    })
+
+    console.log(`🐝 Started scouting 1Password at ${startTime}...`)
 
     try {
+        const secrets = await readFile({ file: 'secrets', data: config.secrets }) as NotifiedSecrets
         const vaultsJson = await execCommand(`OP_SERVICE_ACCOUNT_TOKEN=${ONEPASSWORD_TOKEN} op vault list --format json`)
         const vaults = JSON.parse(vaultsJson) as Vault[]
         let tokensWithExpire = [] as TokensWithExpire[]
@@ -33,12 +40,23 @@ export default async function scoutOnePassword(notifiedSecrets: NotifiedSecrets)
             }
         }
 
-        const { categories, data } = await checkExpiration(notifiedSecrets, tokensWithExpire)
+        const { categories, data } = await checkExpiration(secrets, tokensWithExpire)
         if (data.secretsToReport) {
             await alertExpired(data.ping, data.red, data.finalReport)
         }
 
-        return categories
+        const now = Date.now()
+        for (const level of ['hasExpired', 'expiresNextWeek', 'expiresNextMonth'] as const) {
+            categories[level] = categories[level].filter(n => (now - n.seen) < config.oneDay)
+        }
+
+        writeFile({ file: 'secrets', content: categories })
+
+        const endTime = new Date().toLocaleString('nb-NO', {
+            timeZone: 'Europe/Oslo'
+        })
+
+        console.log(`🐝 Finished scouting 1Password at ${endTime}...`)
     } catch (err) {
         console.error('Error fetching 1Password data:', err)
         throw err

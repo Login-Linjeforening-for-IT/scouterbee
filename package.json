@@ -1,6 +1,6 @@
 {
   "name": "scouterbee",
-  "version": "1.1.1",
+  "version": "2.0.0",
   "main": "src/index.js",
   "type": "module",
   "scripts": {
@@ -11,13 +11,10 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "dotenv": "^17.2.2",
-    "node-schedule": "^2.1.1",
-    "tsx": "^4.20.5"
+    "dotenv": "^17.2.2"
   },
   "devDependencies": {
     "@types/node": "^24.3.0",
-    "@types/node-schedule": "^2.1.8",
     "typescript": "^5.9.2"
   },
   "imports": {

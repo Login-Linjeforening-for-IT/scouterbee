@@ -1,11 +1,26 @@
-import getNpmProjects from './gitlab/getNpmProjects.ts'
-import alert from './gitlab/alert.ts'
-import cloneAndScoutRepositories from './gitlab/cloneAndScoutRepositories.ts'
+import { execSync } from 'child_process'
+import alert from './projects/alert.ts'
+import scoutRepositories from './projects/scoutRepositories.ts'
+import { readFile, writeFile } from './file.ts'
+import config from '#constants'
 
-export default async function scoutGitlab(notifiedVulnerabilities: NotifiedVulnerabilities) {
-    console.log('🐝 Scouting Gitlab...')
-    const repositories = await getNpmProjects()
-    const vulnerabilities = await cloneAndScoutRepositories(repositories)
+export default async function scoutProjects() {
+    const projects = await readFile({ file: 'vulnerabilities', data: config.vulnerabilities }) as NotifiedVulnerabilities
+    const startTimeRaw = new Date()
+    const startTime = startTimeRaw.toLocaleString('nb-NO', {
+        timeZone: 'Europe/Oslo'
+    })
+
+    console.log(`🐝 Started scouting projects at ${startTime}...`)
+
+    const repositories = execSync("ls -d ../*/")
+        .toString()
+        .trim()
+        .split("\n")
+        .map(p => p.replace("../", "")
+        .replace("/", ""))
+
+    const vulnerabilities = await scoutRepositories(repositories)
     const critical = []
     const high = []
     const medium = []
@@ -48,7 +63,7 @@ export default async function scoutGitlab(notifiedVulnerabilities: NotifiedVulne
     let vulnerabilitiesToReport = false
 
     critical.forEach((repository) => {
-        if (!notifiedVulnerabilities.critical.some((r) => r.name === repository.name && r.count <= repository.details.critical)) {
+        if (!projects.critical.some((r) => r.name === repository.name && r.count <= repository.details.critical)) {
             vulnerabilitiesToReport = true
             finalReport.highestSeverity = 'critical'
             const criticalCount = repository.details.critical
@@ -60,7 +75,7 @@ export default async function scoutGitlab(notifiedVulnerabilities: NotifiedVulne
             const mediumText = mediumCount > 0 ? `, Medium: ${mediumCount}` : ''
             finalReport.description += repositoryName + criticalText + highText + mediumText + '.\n'
 
-            notifiedVulnerabilities.critical.push({
+            projects.critical.push({
                 name: repository.name,
                 count: repository.details.critical,
                 time: new Date().getTime()
@@ -69,7 +84,7 @@ export default async function scoutGitlab(notifiedVulnerabilities: NotifiedVulne
     })
 
     high.forEach((repository) => {
-        if (!notifiedVulnerabilities.high.some((r) => r.name === repository.name && r.count <= repository.details.high)) {
+        if (!projects.high.some((r) => r.name === repository.name && r.count <= repository.details.high)) {
             vulnerabilitiesToReport = true
             if (finalReport.highestSeverity === 'medium') {
                 finalReport.highestSeverity = 'high'
@@ -82,7 +97,7 @@ export default async function scoutGitlab(notifiedVulnerabilities: NotifiedVulne
             const mediumText = mediumCount > 0 ? `, Medium: ${mediumCount}` : ''
             finalReport.description += repositoryName + highText + mediumText + '.\n'
 
-            notifiedVulnerabilities.high.push({
+            projects.high.push({
                 name: repository.name,
                 count: repository.details.high,
                 time: new Date().getTime()
@@ -91,13 +106,13 @@ export default async function scoutGitlab(notifiedVulnerabilities: NotifiedVulne
     })
 
     medium.forEach((repository) => {
-        if (!notifiedVulnerabilities.medium.some((r) => r.name === repository.name && r.count <= repository.details.moderate)) {
+        if (!projects.medium.some((r) => r.name === repository.name && r.count <= repository.details.moderate)) {
             const mediumCount = repository.details.moderate
             const repositoryName = `**${repository.name}**`
             const mediumText = `\nMedium: ${mediumCount}`
             finalReport.description += repositoryName + mediumText + '.\n'
 
-            notifiedVulnerabilities.medium.push({
+            projects.medium.push({
                 name: repository.name,
                 count: repository.details.moderate,
                 time: new Date().getTime()
@@ -122,5 +137,19 @@ export default async function scoutGitlab(notifiedVulnerabilities: NotifiedVulne
         alert(finalReport)
     }
 
-    return notifiedVulnerabilities
+    const now = new Date().getTime()
+    for (const level of ['critical', 'high', 'medium'] as const) {
+        projects[level] = projects[level].filter(n => (now - new Date(n.time).getTime()) < config.oneDay)
+    }
+
+    writeFile({ file: 'vulnerabilities', content: projects })
+    console.log('🐝 Updated notified vulnerabilities:', Object.values(projects).map(arr => arr.length))
+
+    const stoppedTimeRaw = new Date()
+    const stoppedTime = stoppedTimeRaw.toLocaleString('nb-NO', {
+        timeZone: 'Europe/Oslo',
+    })
+
+    const duration = (stoppedTimeRaw.getTime() - startTimeRaw.getTime()) / 1000
+    console.log(`🐝 Finished scouting projects at ${stoppedTime} (${duration}s)...`)
 }
