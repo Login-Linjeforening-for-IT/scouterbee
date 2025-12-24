@@ -7,7 +7,7 @@ export default async function heartbeat() {
             throw new Error('Missing heartbeat url.')
         }
 
-        const response = await fetch(url)
+        const response = await fetch(url, { method: 'POST' })
 
         if (!response.ok) {
             throw new Error(await response.text())
