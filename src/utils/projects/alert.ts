@@ -39,6 +39,6 @@ export default async function alert(finalReport: FinalReport) {
 
         return response.status
     } catch (error) {
-        console.log(error)
+        console.log('🐝 Error in alert.ts', error)
     }
 }

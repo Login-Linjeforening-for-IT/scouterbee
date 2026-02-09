@@ -37,7 +37,7 @@ export async function readFile({ file, data }: { file: string, data: object }): 
                     if (content) res(content)
                 }
 
-                console.log(JSON.stringify(error))
+                console.log('🐝 Error in file.ts (readFile -> if error)', JSON.stringify(error))
             }
 
             try {
@@ -46,10 +46,10 @@ export async function readFile({ file, data }: { file: string, data: object }): 
                 if (content) {
                     res(content)
                 } else {
-                    console.log(JSON.stringify(error))
+                    console.log('🐝 Error in file.ts (readFile -> try -> else)', JSON.stringify(error))
                 }
             } catch (error) {
-                console.log(JSON.stringify(error))
+                console.log('🐝 Error in file.ts (readFile -> catch error)', JSON.stringify(error))
             }
         })
     })
@@ -74,11 +74,11 @@ export function writeFile({ file, content, removeBrackets }: writeFileProps) {
 
     fs.writeFile(File, stringifiedContent, (error) => {
         if (error) {
-            console.error(`Error writing data to 'data/notified.json'`)
-            console.log(error)
+            console.error(`🐝 Error writing data to 'data/notified.json'`)
+            console.log('🐝 Error in file.ts', error)
         }
 
-        console.log(`Saved data to file '${File}'.`)
+        console.log(`🐝 Saved data to file '${File}'.`)
     })
 }
 
@@ -93,7 +93,7 @@ export async function createPath({ file, data }: { file: string, data: object })
         try {
             await createFileOrFolder({ entry: currentPath, data })
         } catch (error) {
-            console.error(`Failed to create entry ${currentPath}:`, error)
+            console.error(`🐝 Failed to create entry ${currentPath}:`, error)
             return
         }
     }
@@ -113,10 +113,10 @@ async function createFileOrFolder({ entry, data }: createFileOrFolderProps) {
                 await promises.access(entry)
             } catch (error) {
                 await promises.mkdir(entry, { recursive: true })
-                console.log(`Folder created: ${entry}`)
+                console.log(`🐝 Folder created: ${entry}`)
             }
         }
     } catch (error) {
-        throw new Error(`Failed to create ${entry}: ${error}`)
+        throw new Error(`🐝 Failed to create ${entry}: ${error}`)
     }
 }

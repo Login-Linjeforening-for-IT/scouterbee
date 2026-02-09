@@ -33,6 +33,6 @@ export default async function alertExpired(ping: boolean, red: boolean, finalRep
 
         return response.status
     } catch (error) {
-        console.log(error)
+        console.log('🐝 Error in alertExpired.ts', error)
     }
 }

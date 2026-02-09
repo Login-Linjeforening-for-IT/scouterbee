@@ -21,6 +21,6 @@ export default async function heartbeat() {
         console.log(`🐝 Heartbeat ${now}`, data)
         return data
     } catch (error) {
-        console.log(error)
+        console.log('🐝 Error in heartbeat.ts', error)
     }
 }
