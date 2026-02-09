@@ -13,12 +13,12 @@ export default async function scoutProjects() {
 
     console.log(`🐝 Started scouting projects at ${startTime}...`)
 
-    const repositories = execSync("ls -d ../*/")
+    const repositories = execSync('ls -d ../*/')
         .toString()
         .trim()
         .split("\n")
-        .map(p => p.replace("../", "")
-        .replace("/", ""))
+        .map(p => p.replace('../', '')
+        .replace('/', ''))
 
     const vulnerabilities = await scoutRepositories(repositories)
     const critical = []
@@ -29,6 +29,7 @@ export default async function scoutProjects() {
         if (vulnerability.vulnerabilities.critical > 0) {
             critical.push({
                 name: vulnerability.repository,
+                folder: vulnerability.folder,
                 details: vulnerability.vulnerabilities
             })
 
@@ -38,6 +39,7 @@ export default async function scoutProjects() {
         if (vulnerability.vulnerabilities.high > 0) {
             high.push({
                 name: vulnerability.repository,
+                folder: vulnerability.folder,
                 details: vulnerability.vulnerabilities
             })
 
@@ -47,6 +49,7 @@ export default async function scoutProjects() {
         if (vulnerability.vulnerabilities.moderate > 0) {
             medium.push({
                 name: vulnerability.repository,
+                folder: vulnerability.folder,
                 details: vulnerability.vulnerabilities
             })
 
@@ -69,7 +72,7 @@ export default async function scoutProjects() {
             const criticalCount = repository.details.critical
             const highCount = repository.details.high
             const mediumCount = repository.details.moderate
-            const repositoryName = `**${repository.name}**`
+            const repositoryName = `**${repository.name} (${repository.folder})**`
             const criticalText = `\nCritical: ${criticalCount}`
             const highText = highCount > 0 ? `, High: ${highCount}` : ''
             const mediumText = mediumCount > 0 ? `, Medium: ${mediumCount}` : ''
@@ -77,6 +80,7 @@ export default async function scoutProjects() {
 
             projects.critical.push({
                 name: repository.name,
+                folder: repository.folder,
                 count: repository.details.critical,
                 time: new Date().getTime()
             })
@@ -92,13 +96,14 @@ export default async function scoutProjects() {
 
             const highCount = repository.details.high
             const mediumCount = repository.details.moderate
-            const repositoryName = `**${repository.name}**`
+            const repositoryName = `**${repository.name} (${repository.folder})**`
             const highText = `\nHigh: ${highCount}`
             const mediumText = mediumCount > 0 ? `, Medium: ${mediumCount}` : ''
             finalReport.description += repositoryName + highText + mediumText + '.\n'
 
             projects.high.push({
                 name: repository.name,
+                folder: repository.folder,
                 count: repository.details.high,
                 time: new Date().getTime()
             })
@@ -108,12 +113,13 @@ export default async function scoutProjects() {
     medium.forEach((repository) => {
         if (!projects.medium.some((r) => r.name === repository.name && r.count <= repository.details.moderate)) {
             const mediumCount = repository.details.moderate
-            const repositoryName = `**${repository.name}**`
+            const repositoryName = `**${repository.name} (${repository.folder})**`
             const mediumText = `\nMedium: ${mediumCount}`
             finalReport.description += repositoryName + mediumText + '.\n'
 
             projects.medium.push({
                 name: repository.name,
+                folder: repository.folder,
                 count: repository.details.moderate,
                 time: new Date().getTime()
             })

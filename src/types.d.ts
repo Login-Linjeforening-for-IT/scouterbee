@@ -27,6 +27,7 @@ type Severity = 'critical' | 'high' | 'medium'
 
 type VulnerabilityIdentifier = {
     name: string
+    folder: string
     count: number
     time: number
 }
