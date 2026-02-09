@@ -1,6 +1,6 @@
 import { envLoad } from 'utilbee'
 
-envLoad({path: '.env'})
+envLoad({ path: '.env' })
 
 const requiredEnvironmentVariables = [
     'ONEPASSWORD_TOKEN',

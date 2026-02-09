@@ -20,6 +20,6 @@
     "#/*": "./src/*"
   },
   "dependencies": {
-    "utilbee": "^1.3.0"
+    "utilbee": "^1.3.1"
   }
 }
